@@ -1,0 +1,61 @@
+How to install Java, Scala and Apache Spark on Ubuntu/Linux Mint.
+    by Alejandro Puerto Castro
+
+Java:
+1. Check if you already have installed java.
+    java -version
+2. If not or you have a different version than 8, then download and install the compatible version for using Apache Spark. Not all versions are compatible, so in this case, we are using the version 8.
+    sudo apt install openjdk-8-jdk
+3. After installed, we can check if there are other versions installed in our system. If there is another one, then you must select the version 8 to use it and make it default.
+    sudo update-alternatives --config java
+4. We confirm that the option we chose is being used.
+    java -version
+5. We need to add the path to run java without any warning. We are using nano editor to access the environment file and add the path.
+    sudo nano /etc/environment
+6.  We add the path where is installed java (you can check it using the step 3; the path is the second column). We add it at the end of the environment file.
+        JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/bin/java"
+7. To apply changes we reload the file.
+    source /etc/environment
+8. We confirm that the path was added successfully.
+    echo $JAVA_HOME
+
+Scala:
+1. In case that we have some scala files or installation, we need to get rid off them with:
+    sudo apt-get remove scala-library scala
+2. We download scala. In this case we are downloading version 2.13.0.deb
+    sudo wget www.scala-lang.org/files/archive/scala-2.13.0.deb
+3. We unpack and install the file downloaded.
+    sudo dpkg -i scala-2.11.8.deb
+4. We check that scala was installed and verify the version.
+    scala -version
+
+Spark:
+1. We download spark. In this case we are using the version 2.4.3bin for hadoop 2.7.
+    sudo wget https://www-eu.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz
+2. Now we move from directory the file downloaded to the directory we want. In this case I am moving it to /home/alejandro/ for easy access.
+    mv /home/alejandro/Downloads/spark-2.4.3-bin-hadoop2.7.tgz /home/alejandro/
+3. Now we extract the tar file in the current directory.
+    tar xvf spark-2.4.3-bin-hadoop2.7.tgz
+4. We can change the name of the file/directory for easy access. In this case I am changing it to spark.
+    mv spark-2.4.3-bin-hadoop2.7 spark
+5. Now we add Spark to Path. We open the bashrc file. This is done for executing Spark scripts.
+    sudo nano ~/.bashrc
+6. We add the path of Spark at the very end of the bashrc file. Also we add the path of java if it's not already there.
+        SPARK_HOME=/home/alejandro/spark
+        export PATH=$SPARK_HOME/bin:$PATH
+        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+7. To apply changes we reload the file.
+    source ~/.bashrc
+8. Now we can open spark shell (using Scala).
+    ./spark/bin/spark-shell
+8.1 Or you can open it using Python.
+    ./spark/bin/pyspark
+
+
+
+References:
+https://medium.com/@josemarcialportilla/installing-scala-and-spark-on-ubuntu-5665ee4b62b1
+https://thishosting.rocks/install-java-ubuntu/
+http://www.codebind.com/linux-tutorials/install-scala-sbt-java-ubuntu-18-04-lts-linux/
+https://linuxhint.com/install-apache-spark-ubuntu-17-10/
+https://stackoverflow.com/questions/53583199/pyspark-error-unsupported-class-file-major-version-55
